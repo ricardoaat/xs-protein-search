@@ -1,6 +1,6 @@
-# uniprot-front
+# XS Protein Search
 
-> An small front end application for uniprot backend web services
+An small front end application for uniprot backend web services
 
 ## Build Setup
 
