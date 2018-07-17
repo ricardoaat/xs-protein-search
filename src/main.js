@@ -6,8 +6,10 @@ import router from './router'
 import Vuetify from 'vuetify'
 import './assets/stylus/main.styl'
 import { store } from './store'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, axios, VueAxios)
 
 Vue.config.productionTip = false
 
@@ -17,5 +19,11 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+
+  computed: {
+    proteins () {
+      return this.$store.getters.proteins
+    }
+  }
 })
