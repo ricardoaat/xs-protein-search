@@ -19,11 +19,5 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>',
-
-  computed: {
-    proteins () {
-      return this.$store.getters.proteins
-    }
-  }
+  template: '<App/>'
 })

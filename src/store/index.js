@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
@@ -15,11 +14,17 @@ export const store = new Vuex.Store({
       state.loading = flag
     },
     SET_PROTEINS (state, proteins) {
+      proteins.map((protein, i) => {
+        protein.show = false
+        return protein
+      })
       state.proteins = proteins
     }
   },
   actions: {
-    loadProteins ({ commit }) {
+    loadProteins ({
+      commit
+    }) {
       commit('SET_LOADING', true)
       axios
         .get('https://www.ebi.ac.uk/proteins/api/proteins?offset=0&size=20&reviewed=true&isoform=0&taxid=10090')

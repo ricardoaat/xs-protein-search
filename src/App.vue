@@ -42,12 +42,19 @@
       <router-view/>
     </v-content>
     <v-footer :fixed="fixed" app>
-      <span>&copy; 2018</span>
+      <v-flex
+        text-md-center
+      >
+        &copy;2018 — <strong>Ricardo</strong>
+      </v-flex>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import Home from './components/Home.vue'
+import HelloWorld from './components/HelloWorld.vue'
+
 export default {
   data () {
     return {
@@ -72,6 +79,11 @@ export default {
       title: 'UniProt XS'
     }
   },
+  components: {
+    Home,
+    HelloWorld
+  },
+  temp_proteins: [],
   name: 'App'
 }
 </script>
