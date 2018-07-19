@@ -94,26 +94,38 @@ export default Vue.component('Home', {
   beforeCreate () {
     this.$store.dispatch('loadProteins')
   },
-  created () {
-    this.proteinsData = this.getProteins
-    console.log(this.proteinsData)
-  },
   computed: {
     proteins () {
       return this.$store.getters.proteins
     },
     schemaData () {
-      let schema = []
+      /* eslint-disable quotes */
+      let schema = {
+        "@context": [
+          "http://schema.org",
+          "http://bioschemas.org/specifications"
+        ],
+        "@type": "Dataset",
+        "name": "Extra small protein collection",
+        "description": "List all the proteins for the taxon id 10090 organism Mus musculus using UniProt API",
+        "url": "https://ricardoaat.github.io/xs-protein-search/dist",
+        "@graph": []
+      }
+
       this.proteins.forEach((protein) => {
-        /* eslint-disable quotes */
-        schema.push(
+        schema['@graph'].push(
           {
-            "@context": [
-              "http://schema.org",
-              "http://bioschemas.org/specifications"
-            ],
-            "@type": "DataRecord",
-            "identifier": protein.id
+            "@type": [ "BioChemEntity", "Protein" ],
+            "@id": `http://www.identifiers.org/uniprot:${protein.accession}`,
+            "identifier": protein.accession,
+            "url": `http://www.uniprot.org/uniprot/${protein.accession}`,
+            "name": protein.protein.recommendedName.fullName.value,
+            "alternateName": protein.protein.alternativeName !== undefined ? protein.protein.alternativeName[0].fullName.value : '',
+            "sameAs": `http://purl.uniprot.org/uniprot/${protein.accession}`,
+            "contains": {
+              "@type": "Gene",
+              "name": protein.gene !== undefined ? protein.gene[0].name.value : ''
+            }
           }
         )
       })
@@ -125,7 +137,6 @@ export default Vue.component('Home', {
   },
   watch: {
     proteins: function (newVal, oldVal) {
-      console.log(newVal)
     }
   }
 })
