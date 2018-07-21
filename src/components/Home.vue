@@ -3,9 +3,16 @@
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
           <h1>UniProt service</h1>
+          <p>List all the proteins (<strong v-text="totalProteins"></strong>) for the taxon id 10090 organism Mus musculus using UniProt API</p>
           <v-content>
             <v-layout align-space-around justify-center column fill-height>
               
+              <v-pagination
+                v-model="page"
+                :length="totalPages"
+                circle
+              ></v-pagination>
+
               <v-card 
                 v-for="(protein, index) in proteins"
                 v-bind:protein = "protein"
@@ -31,14 +38,24 @@
                     
                     <div class="detail pa-3" v-if="protein.show">
                       <v-layout align-center justify-space-around="" row>
-                      <div class="property px-3 py-1">
-                        <div class="label">Organism</div>
-                        <div class="value" v-if="typeof protein.organism !== 'undefined'">{{protein.organism.names[0].value}}</div>
-                      </div>
-                      <div class="property px-3 py-1">
-                        <div class="label">Gene</div>
-                        <div class="value" v-if="typeof protein.gene[0] !== 'undefined'">{{protein.gene[0].name.value}}</div>   
-                      </div>
+                        <div class="property px-3 py-1">
+                          <div class="label">Organism</div>
+                          <div class="value" v-if="typeof protein.organism !== 'undefined'">{{protein.organism.names[0].value}}</div>
+                        </div>
+                        <div class="property px-3 py-1">
+                          <div class="label">Gene</div>
+                          <div class="value" v-if="typeof protein.gene[0] !== 'undefined'">{{protein.gene[0].name.value}}</div>   
+                        </div>
+                        <div class="property px-3 py-1 ml-1">
+                          <div class="label">First reference</div>
+                          <div class="value" v-if="typeof protein.references[0] !== 'undefined'">{{protein.references[0].citation.title}}</div>   
+                        </div>
+                      </v-layout>
+                      <v-layout class="ma-3" align-start justify-center row wrap>
+                        <div class="text-xs-center" v-for="(keywords, i) in protein.keywords"
+                        :key="i">
+                          <v-chip color="primary" text-color="white">{{keywords.value}}</v-chip>
+                        </div>
                       </v-layout>
                     </div>
                     
@@ -56,7 +73,7 @@
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
   .slide-fade-enter-active {
     transition: all .3s ease;
   }
@@ -85,18 +102,36 @@
 
 <script>
 import Vue from 'vue'
+
 export default Vue.component('Home', {
   data () {
     return {
-      proteinsData: []
+      page: 1
     }
   },
+  created () {
+  },
   beforeCreate () {
-    this.$store.dispatch('loadProteins')
+    let params = {
+      offset: 0,
+      size: 20,
+      reviewed: true,
+      isoform: 0,
+      taxid: 10090
+    }
+    this.$store.dispatch('loadProteins', { 'params': params })
   },
   computed: {
     proteins () {
       return this.$store.getters.proteins
+    },
+    totalPages () {
+      let proteinsCount = this.$store.getters.proteinsCount
+      let totalPages = Math.ceil(proteinsCount / 20)
+      return totalPages
+    },
+    totalProteins () {
+      return this.$store.getters.proteinsCount
     },
     schemaData () {
       /* eslint-disable quotes */
@@ -133,10 +168,17 @@ export default Vue.component('Home', {
     }
   },
   methods: {
-
   },
   watch: {
-    proteins: function (newVal, oldVal) {
+    page: function (newVal, oldVal) {
+      let params = {
+        offset: (newVal - 1) * 20,
+        size: 20,
+        reviewed: true,
+        isoform: 0,
+        taxid: 10090
+      }
+      this.$store.dispatch('loadProteins', { 'params': params })
     }
   }
 })

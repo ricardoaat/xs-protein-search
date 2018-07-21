@@ -1,6 +1,6 @@
 # XS Protein Search
 
-An small front end application for uniprot backend web services
+List all the proteins for the taxon id 10090 organism Mus musculus using UniProt API.
 
 ## Build Setup
 
