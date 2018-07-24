@@ -76,7 +76,7 @@ export default {
       miniVariant: true,
       right: false,
       rightDrawer: false,
-      title: 'UniProt XS'
+      title: 'xs-protein-search'
     }
   },
   components: {
