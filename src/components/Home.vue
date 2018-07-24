@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
       <v-layout column align-center>
-          <h1>UniProt service</h1>
+          <h1>xs-protein-search</h1>
           <p>List all the proteins (<strong v-text="totalProteins"></strong>) for the taxon id 10090 organism Mus musculus using UniProt API</p>
           <v-content>
             <v-layout align-space-around justify-center column fill-height>

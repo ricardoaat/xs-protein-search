@@ -1,5 +1,5 @@
 {
-  "name": "uniprot-front",
+  "name": "xs-protein-search",
   "version": "1.0.0",
   "description": "List all the proteins for the taxon id 10090 organism Mus musculus using UniProt API",
   "author": "Ric Arcila <ricartomojo@gmail.com>",
